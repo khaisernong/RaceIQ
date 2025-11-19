@@ -1,0 +1,179 @@
+% RaceIQ Pitch Deck (Beamer)
+% Compile with: pdflatex pitch_deck.tex (run twice for TOC)
+\documentclass[aspectratio=169]{beamer}
+
+% Theme and colors
+\usetheme{Madrid}
+\usecolortheme{default}
+\usefonttheme{professionalfonts}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\definecolor{ToyotaRed}{HTML}{D0312D}
+\setbeamercolor{structure}{fg=ToyotaRed}
+\setbeamercolor{title}{fg=white,bg=ToyotaRed}
+\setbeamercolor{frametitle}{fg=ToyotaRed}
+\setbeamercolor{item}{fg=ToyotaRed}
+\setbeamercolor{block title}{bg=ToyotaRed!10, fg=ToyotaRed}
+\setbeamercolor{block body}{bg=ToyotaRed!3}
+\setbeamertemplate{navigation symbols}{}
+
+% Title
+\title{RaceIQ\\\small Real-Time Racing Intelligence \& Strategy Platform}
+\subtitle{Toyota Gazoo Racing Hackathon 2025}
+\author{University of Tsukuba Malaysia}
+\institute{GitHub: \texttt{github.com/khaisernong/RaceIQ}}
+\date{\today}
+
+\begin{document}
+
+% Title slide
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% Problem
+\begin{frame}{The Problem}
+  \begin{itemize}
+    \item Pit stop timing in endurance racing is decisive yet often based on gut feel.
+    \item Pitting too early: lost track position. Too late: lap time loss from tire degradation.
+    \item Teams need real-time, data-driven strategy — not post-race analysis.
+  \end{itemize}
+\end{frame}
+
+% Solution
+\begin{frame}{Our Solution: RaceIQ}
+  \begin{itemize}
+    \item AI-powered platform that transforms raw race data into pit stop recommendations.
+    \item Live dashboard built with \textbf{Python + Streamlit} and \textbf{Plotly}.
+    \item Tire degradation model learns track-specific wear patterns.
+    \item Clear GO / MONITOR / PIT-NOW guidance for fast decisions.
+  \end{itemize}
+\end{frame}
+
+% Demo plan
+\begin{frame}{Live Demo Flow (7 min)}
+  \begin{enumerate}
+    \item Race Overview (KPIs, lap times, results)
+    \item Strategy Analysis (tire age, lap vs. tire age, stints)
+    \item Performance Trends (sectors, consistency, distributions)
+    \item Pit Stop Optimizer (recommendation, forecast, metrics)
+  \end{enumerate}
+  \vspace{0.5em}
+  Sample tracks used: \textbf{Barber} and \textbf{COTA}.
+\end{frame}
+
+% Dataset
+\begin{frame}{Dataset}
+  \begin{itemize}
+    \item GR Cup Series across 7 tracks, 12 races, 33k+ data points.
+    \item Files: results, sector analysis, weather, lap times.\\Telemetry present but not used in current demo.
+    \item For repository size, sample data includes \textbf{Barber} and \textbf{COTA} only.
+  \end{itemize}
+\end{frame}
+
+% Architecture
+\begin{frame}{Architecture}
+  \begin{block}{Four Layers}
+    \begin{enumerate}
+      \item \textbf{Data Ingestion}: Flexible CSV loader with auto-detection, fallbacks.
+      \item \textbf{Analytics Engine}: Feature engineering, consistency metrics, rolling stats.
+      \item \textbf{Decision Support}: Tire degradation model, pit window logic.
+      \item \textbf{Presentation}: Streamlit dashboard (4 tabs) with Plotly visuals.
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+% Model
+\begin{frame}{Tire Degradation Model}
+  \begin{itemize}
+    \item Algorithm: \textbf{Polynomial regression} (degree 2) via scikit-learn.
+    \item Features: \(\text{tire\_age},\, \text{tire\_age}^2,\, \text{air\_temp},\, \text{track\_temp}\).
+    \item Performance observed: \(R^2\) = 0.17–0.27, RMSE = 1.7–3.7s (varies by track).
+    \item Output used for: lap time forecasting, degradation rate, optimal pit lap.
+  \end{itemize}
+\end{frame}
+
+% Results examples
+\begin{frame}{Key Results (Examples)}
+  \begin{itemize}
+    \item \textbf{Barber Race 1}: \(R^2\) test = 0.170, RMSE = 3.667s (532 samples).
+    \item \textbf{COTA} (with sector fallback): model runs and produces recommendations.
+    \item Clear degradation trends: lap times rise with tire age; optimizer identifies pit window.
+  \end{itemize}
+\end{frame}
+
+% Dashboard
+\begin{frame}{Dashboard Highlights}
+  \begin{itemize}
+    \item \textbf{Race Overview}: KPIs, lap time chart, official results.
+    \item \textbf{Strategy Analysis}: Tire age progression, lap vs tire age, stint analysis.
+    \item \textbf{Performance Trends}: Sector times, consistency, lap distribution.
+    \item \textbf{Pit Optimizer}: Recommendation (GO/MONITOR/PIT), forecast, degradation metrics.
+  \end{itemize}
+\end{frame}
+
+% Differentiators
+\begin{frame}{Competitive Advantages}
+  \begin{enumerate}
+    \item Real-time \textbf{predictive} analytics (beyond visualization).
+    \item \textbf{Track-specific} learning for degradation behavior.
+    \item \textbf{Multi-factor} inputs (tire age, temps, consistency).
+    \item Actionable alerts: clear guidance, not just charts.
+    \item Deployment-ready (Streamlit Cloud or on-prem).
+  \end{enumerate}
+\end{frame}
+
+% Impact scenario
+\begin{frame}{Impact Scenario (COTA)}
+  \begin{itemize}
+    \item Lap 18 decision: pit now or push 5 laps?
+    \item Current: 2:15.3. Predicted lap 23: 2:18.8 (\(\sim\)3.5s slower).
+    \item Recommendation: \textbf{PIT NOW}. Time saved across stint: \(\geq\) 15s.
+  \end{itemize}
+\end{frame}
+
+% Roadmap
+\begin{frame}{Roadmap}
+  \begin{itemize}
+    \item Live telemetry integration for real-time streams.
+    \item Fuel strategy optimization (joint tire + fuel windows).
+    \item Driver-specific models; multi-vehicle comparison.
+    \item Mobile companion app for pit crews.
+  \end{itemize}
+\end{frame}
+
+% Deployment
+\begin{frame}{Deployment \& Demo}
+  \begin{itemize}
+    \item Local dev server: \texttt{streamlit run src/ui/dashboard.py}
+    \item Cloud ready: Streamlit Cloud with repo \texttt{khaisernong/RaceIQ}
+    \item Dataset handling: sample (Barber/COTA) in-repo; full dataset external.
+  \end{itemize}
+\end{frame}
+
+% Call to action
+\begin{frame}{Call to Action}
+  \begin{itemize}
+    \item Put RaceIQ in the hands of Toyota GR Cup teams.
+    \item Pilot during practice sessions; validate time savings and decision quality.
+    \item Expand to full live telemetry and fuel strategy.
+  \end{itemize}
+\end{frame}
+
+% Q&A
+\begin{frame}{Q\&A}
+  \begin{block}{Common Questions}
+    \begin{itemize}
+      \item \textbf{Accuracy}: \(R^2\) 0.17–0.27; combined with degradation rates for robust pit windows.
+      \item \textbf{Live data}: Architecture supports streaming; current demo is post-race.
+      \item \textbf{Weather shifts}: Model adapts with merged weather features and updates.
+      \item \textbf{New track setup}: \(<5\) minutes with auto-detection and training.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\end{document}
